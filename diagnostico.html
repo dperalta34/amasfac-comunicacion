@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagnóstico AMASFAC · Por todo lo que nos une</title>
+<meta name="description" content="Diagnóstico AMASFAC 2027: 10 preguntas en menos de 3 minutos para descubrir los beneficios hechos para ti.">
+<meta name="theme-color" content="#004E57">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<style>
+:root{
+  --teal:#00747F;--teal-deep:#004E57;--teal-ink:#06343A;--teal-light:#0A8591;
+  --ink:#2F3738;--muted:#6B7678;--mist:#F3F7F8;--line:#E3EBEC;
+  --orange:#FF6A13;--orange-deep:#E85A0A;--yellow:#FFC20E;--yellow-deep:#EAAF00;
+  --blue:#0B4EA2;--blue-deep:#083B7A;--green:#2FB81E;--green-deep:#23961A;
+  --cyan:#8CC7CE;--peach:#FFC9A4;--red:#E5261F;
+  --g-teal:linear-gradient(135deg,var(--teal) 0%,var(--teal-deep) 100%);
+  --g-blue:linear-gradient(135deg,var(--blue) 0%,var(--blue-deep) 100%);
+  --g-orange:linear-gradient(135deg,var(--orange) 0%,var(--orange-deep) 100%);
+  --g-yellow:linear-gradient(135deg,var(--yellow) 0%,var(--yellow-deep) 100%);
+  --g-green:linear-gradient(135deg,var(--green) 0%,var(--green-deep) 100%);
+  --font:"Jost","Gill Sans","Gill Sans MT",Calibri,sans-serif;
+  --radius:16px;
+  --shadow:0 18px 44px rgba(6,52,58,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--mist);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{display:flex;flex-direction:column;min-height:100dvh;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:transparent}
+input,select{font:inherit;color:inherit}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- Layout base ---------- */
+.app{max-width:720px;width:100%;margin:0 auto;padding:16px 18px 40px;display:flex;flex-direction:column;flex:1}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 2px 14px}
+.brand{display:flex;flex-direction:column;line-height:1}
+.brand b{font-size:19px;letter-spacing:-.01em;color:var(--teal-deep);font-weight:700}
+.brand small{font-size:11px;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
+.closeBtn{min-width:44px;min-height:44px;border-radius:999px;display:grid;place-items:center;color:var(--muted);font-size:22px}
+.closeBtn:hover{background:#e8f0f1;color:var(--teal-deep)}
+
+/* ---------- Progreso ---------- */
+.prog{margin:4px 2px 18px}
+.prog-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.prog-bar{height:6px;background:#E6EEEF;border-radius:999px;overflow:hidden}
+.prog-fill{height:100%;background:var(--g-teal);width:0;transition:width .35s ease}
+.backBtn{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px;color:var(--teal-deep);font-weight:600;font-size:14px}
+.backBtn:hover{color:var(--teal)}
+
+/* ---------- Cards / pantalla ---------- */
+.screen{background:#fff;border-radius:22px;padding:clamp(22px,4vw,34px);box-shadow:var(--shadow);border:1px solid var(--line);flex:1;display:flex;flex-direction:column}
+.q-title{font-size:clamp(22px,5.6vw,30px);font-weight:700;letter-spacing:-.015em;line-height:1.2;color:var(--teal-ink);margin-bottom:6px}
+.q-sub{color:var(--muted);font-size:clamp(14px,2.6vw,16px);margin-bottom:18px}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.opt{position:relative;display:flex;align-items:center;gap:12px;min-height:56px;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:#fff;text-align:left;font-weight:600;font-size:16px;line-height:1.3;transition:border-color .15s ease,background .15s ease,transform .1s ease;color:var(--ink)}
+.opt:hover{border-color:var(--teal);background:#f6fbfc}
+.opt:focus-visible{outline:3px solid #a7d8dd;outline-offset:2px}
+.opt.selected{border-color:var(--teal);background:#eaf7f8;color:var(--teal-deep)}
+.opt .mark{flex-shrink:0;width:22px;height:22px;border-radius:50%;border:2px solid #cfd8da;display:grid;place-items:center;transition:all .15s ease}
+.opt.multi .mark{border-radius:6px}
+.opt.selected .mark{border-color:var(--teal);background:var(--teal)}
+.opt.selected .mark::after{content:"";width:8px;height:8px;background:#fff;border-radius:50%}
+.opt.multi.selected .mark::after{border-radius:2px;width:10px;height:10px}
+
+/* ---------- Botón primario ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 24px;border-radius:999px;background:var(--g-teal);color:#fff;font-weight:700;font-size:16px;letter-spacing:.01em;box-shadow:0 14px 30px rgba(0,116,127,.28);transition:transform .12s ease,box-shadow .12s ease;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 18px 36px rgba(0,116,127,.34)}
+.btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;transform:none}
+.btn.secondary{background:#fff;color:var(--teal-deep);border:2px solid var(--teal);box-shadow:none}
+.btn.secondary:hover{background:#eaf7f8}
+.btn.ghost{background:transparent;color:var(--teal-deep);box-shadow:none}
+.btn.wide{width:100%}
+.btn.gold{background:var(--g-yellow);color:#3a2f00;box-shadow:0 14px 30px rgba(234,175,0,.28)}
+.btn.orange{background:var(--g-orange);color:#fff;box-shadow:0 14px 30px rgba(232,90,10,.28)}
+
+/* ---------- Tarjeta "Sabías que" ---------- */
+.sabias{margin-top:18px;background:#fff8e1;border:2px solid var(--yellow);border-radius:16px;padding:16px 18px;position:relative;animation:slideUp .4s ease both}
+.sabias .ic{position:absolute;top:-12px;left:16px;background:var(--g-yellow);color:#3a2f00;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.sabias p{font-size:15px;line-height:1.5;color:var(--ink);margin-top:6px}
+.sabias p + p{margin-top:8px}
+
+/* ---------- Entrada ---------- */
+.hero{text-align:left}
+.hero h1{font-size:clamp(28px,7vw,42px);font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--teal-ink);margin-bottom:12px}
+.hero p.lead{font-size:clamp(15px,3vw,17px);color:var(--muted);line-height:1.5;margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 22px}
+.chip{display:inline-block;background:#eaf7f8;color:var(--teal-deep);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;letter-spacing:.04em}
+.chip.gold{background:#fff5d6;color:#6a5500}
+.chip.orange{background:#ffe3d0;color:#8b3a05}
+label.fld{display:block;margin-bottom:18px}
+label.fld span{display:block;font-size:13px;font-weight:600;color:var(--teal-deep);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.pill-group{display:flex;gap:10px;flex-wrap:wrap}
+.pill-opt{flex:1 1 180px;min-height:52px;padding:14px 16px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:600;transition:all .15s ease}
+.pill-opt:hover{border-color:var(--teal)}
+.pill-opt.on{background:var(--teal);border-color:var(--teal);color:#fff}
+select{width:100%;min-height:52px;padding:0 18px;border-radius:14px;border:2px solid var(--line);background:#fff;font-weight:600;color:var(--ink);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232F3738' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 16px center;background-size:18px;padding-right:48px}
+select:focus{outline:3px solid #a7d8dd;outline-offset:2px}
+
+/* ---------- Footer / navegación de pregunta ---------- */
+.q-actions{margin-top:auto;padding-top:18px;display:flex;flex-direction:column;gap:10px}
+
+/* ---------- Resultado ---------- */
+.result{padding:0}
+.result-head{background:var(--g-teal);color:#fff;padding:26px clamp(22px,4vw,32px) 24px;border-radius:22px 22px 0 0}
+.result-head small{font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
+.result-head h1{font-size:clamp(24px,5vw,32px);font-weight:700;letter-spacing:-.015em;margin:4px 0 10px;line-height:1.15}
+.result-head .perfil{font-size:14px;opacity:.9;margin-bottom:8px}
+.result-head .count{font-size:clamp(15px,2.8vw,17px);font-weight:600}
+.result-body{padding:clamp(20px,4vw,28px);background:#fff;border-radius:0 0 22px 22px;display:flex;flex-direction:column;gap:22px}
+.section-title{font-size:18px;font-weight:700;color:var(--teal-deep);letter-spacing:-.01em;margin-bottom:10px}
+
+.b-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 6px 16px rgba(6,52,58,.05);display:flex;flex-direction:column;gap:8px}
+.b-card.top{border-left:5px solid var(--orange)}
+.b-card .b-head{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.b-card h3{font-size:17px;font-weight:700;color:var(--teal-ink);letter-spacing:-.01em;line-height:1.25;flex:1;min-width:0}
+.b-card .tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:999px;align-self:flex-start;flex-shrink:0}
+.tag.tuyo{background:#e2f6df;color:var(--green-deep)}
+.tag.exclusivo{background:#fff2cc;color:#876500}
+.b-card p.desc{font-size:14.5px;line-height:1.5;color:var(--ink)}
+.b-card .why{font-size:13.5px;color:var(--muted);background:#f6fbfc;border-left:3px solid var(--teal);padding:8px 10px;border-radius:0 8px 8px 0;line-height:1.4}
+.b-card .why b{color:var(--teal-deep);font-weight:700}
+.b-card .detail{display:none;font-size:13.5px;line-height:1.55;color:var(--ink);background:#f7f9fa;border-radius:10px;padding:12px 14px;margin-top:4px;border:1px solid var(--line)}
+.b-card.open .detail{display:block;animation:slideUp .25s ease both}
+.b-card .extra{font-size:13px;color:var(--muted);margin-top:6px}
+.b-card .b-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px}
+.b-card .b-foot .btn{min-height:44px;padding:0 18px;font-size:14px;box-shadow:none}
+.toggleDetail{font-size:13px;font-weight:600;color:var(--teal);text-decoration:underline;padding:4px 0;min-height:32px}
+
+/* Grupo plegable (También tienes / Siempre contigo) */
+.collapse{border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+.collapse > summary{cursor:pointer;padding:14px 16px;font-weight:700;color:var(--teal-deep);list-style:none;display:flex;justify-content:space-between;align-items:center;font-size:15px;min-height:52px}
+.collapse > summary::-webkit-details-marker{display:none}
+.collapse > summary::after{content:"+";font-size:22px;font-weight:300;color:var(--teal);transition:transform .2s ease}
+.collapse[open] > summary::after{transform:rotate(45deg)}
+.collapse .inner{padding:0 16px 16px;display:flex;flex-direction:column;gap:12px}
+
+/* Cierre */
+.rate{display:flex;gap:8px;margin-top:10px;justify-content:center}
+.star{min-width:48px;min-height:48px;border-radius:12px;background:#f4f7f8;display:grid;place-items:center;font-size:22px;color:#c5cfd2;border:2px solid transparent;transition:all .15s ease}
+.star:hover,.star.on{background:#fff5d6;color:var(--yellow-deep);border-color:var(--yellow)}
+.rate-msg{text-align:center;font-size:13px;color:var(--muted);margin-top:8px;min-height:20px}
+
+.form-grid{display:flex;flex-direction:column;gap:12px}
+.form-grid input[type="text"],.form-grid input[type="email"],.form-grid input[type="tel"]{width:100%;min-height:52px;padding:0 16px;border-radius:12px;border:2px solid var(--line);background:#fff}
+.form-grid input:focus{outline:3px solid #a7d8dd;outline-offset:2px;border-color:var(--teal)}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.4;color:var(--ink)}
+.chk input{margin-top:3px;min-width:18px;min-height:18px;accent-color:var(--teal)}
+
+.unete-banner{background:var(--g-orange);color:#fff;padding:18px 20px;border-radius:16px;display:flex;flex-direction:column;gap:6px}
+.unete-banner b{font-size:17px;letter-spacing:-.01em}
+.unete-banner .lines{font-size:14px;opacity:.95}
+.unete-banner .lines a{color:#fff;text-decoration:underline}
+.unete-banner .btn{align-self:flex-start;margin-top:6px}
+
+.cierre-nav{display:flex;flex-direction:column;gap:10px}
+
+/* ---------- Animaciones ---------- */
+@keyframes slideUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.view{animation:fadeIn .25s ease both}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important}
+}
+
+@media(min-width:720px){
+  .app{padding:28px 24px 50px}
+  .topbar{padding-bottom:18px}
+}
+</style>
+</head>
+<body>
+<div class="app" role="main">
+  <header class="topbar">
+    <div class="brand">
+      <b>AMASFAC</b>
+      <small>Por todo lo que nos une</small>
+    </div>
+    <button class="closeBtn" id="closeBtn" aria-label="Cerrar diagnóstico" title="Cerrar" hidden>×</button>
+  </header>
+
+  <!-- Vista dinámica -->
+  <div id="view" class="view"></div>
+</div>
+
+<script src="diagnostico.config.js"></script>
+<script>
+(function(){
+"use strict";
+const CFG = window.DIAGNOSTICO;
+const VIEW = document.getElementById("view");
+const CLOSE = document.getElementById("closeBtn");
+
+// --------- Detección de contexto (abierto en iframe/desde presentación) ---------
+const inFrame = (() => { try { return window.self !== window.top; } catch(e){ return true; } })();
+const params = new URLSearchParams(location.search);
+const fromPresentation = inFrame || params.get("from") === "presentacion";
+if (inFrame) { CLOSE.hidden = false; }
+CLOSE.addEventListener("click", closeDiag);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && inFrame) closeDiag(); });
+function closeDiag(){ try { window.parent.postMessage({type:"amasfac:diagnostico:close"}, "*"); } catch(_){} }
+
+// --------- Estado ---------
+const state = {
+  asociado: null,          // true | false
+  seccion: null,           // string
+  seccionIsOther: false,
+  answers: {},             // questionId → Set(optionIds) | string
+  currentIdx: 0,           // índice en flow()
+  rating: 0,
+  contacto: { nombre:"", correo:"", celular:"", acepta:false }
+};
+
+// --------- Helpers ---------
+function h(tag, attrs, ...children){
+  const el = document.createElement(tag);
+  if (attrs) for (const k in attrs) {
+    if (k === "class") el.className = attrs[k];
+    else if (k === "html") el.innerHTML = attrs[k];
+    else if (k.startsWith("on") && typeof attrs[k] === "function") el.addEventListener(k.slice(2), attrs[k]);
+    else if (attrs[k] === true) el.setAttribute(k, "");
+    else if (attrs[k] !== false && attrs[k] != null) el.setAttribute(k, attrs[k]);
+  }
+  for (const c of children.flat()) if (c != null) el.append(c.nodeType ? c : document.createTextNode(c));
+  return el;
+}
+function clearView(){ VIEW.innerHTML = ""; VIEW.classList.remove("view"); void VIEW.offsetWidth; VIEW.classList.add("view"); }
+function templ(str, data){ return String(str).replace(/\{(\w+)\}/g, (_, k) => data[k] ?? ""); }
+
+// Flujo dinámico: lista de preguntas aplicables a este usuario
+function flow(){
+  const list = [];
+  for (const q of CFG.preguntas){
+    if (q.dependsOn){
+      const ans = state.answers[q.dependsOn.questionId];
+      if (!ans) continue;
+      const set = ans instanceof Set ? ans : new Set([ans]);
+      if (!set.has(q.dependsOn.includesOptionId)) continue;
+    }
+    list.push(q);
+  }
+  return list;
+}
+
+// --------- Pantalla de entrada ---------
+function renderEntry(){
+  clearView();
+  const e = CFG.entrada;
+  const list = state.asociado === false
+    ? [...CFG.secciones, ...CFG.delegaciones, e.seccionOtra].sort()
+    : [...CFG.secciones, ...CFG.delegaciones, e.seccionOtra];
+
+  const hero = h("section", {class:"hero screen"},
+    h("h1", {}, e.titulo),
+    h("p", {class:"lead"}, e.subtitulo),
+    h("div", {class:"chips"},
+      h("span", {class:"chip"}, "Objetivo 3 · Beneficios"),
+      h("span", {class:"chip gold"}, "Objetivo 4 · Nuevos agentes"),
+      h("span", {class:"chip orange"}, "Foco · Cédula CNSF"),
+    ),
+    h("label", {class:"fld"},
+      h("span", {}, e.preguntaAfiliacion),
+      h("div", {class:"pill-group", role:"radiogroup"},
+        h("button", {type:"button", class:"pill-opt" + (state.asociado===true?" on":""), role:"radio", "aria-checked":state.asociado===true, onclick:() => setAsoc(true)}, e.opcionSi),
+        h("button", {type:"button", class:"pill-opt" + (state.asociado===false?" on":""), role:"radio", "aria-checked":state.asociado===false, onclick:() => setAsoc(false)}, e.opcionNo),
+      ),
+    ),
+    state.asociado !== null && h("label", {class:"fld"},
+      h("span", {}, state.asociado ? e.preguntaSeccionAsociado : e.preguntaSeccionNoAsociado),
+      (() => {
+        const sel = h("select", {id:"selSeccion", onchange:(ev)=>{ state.seccion = ev.target.value || null; state.seccionIsOther = state.seccion === e.seccionOtra; updateEntryBtn(); }},
+          h("option", {value:""}, "— Selecciona —"),
+          ...list.map(s => h("option", {value:s, selected: state.seccion===s}, s)),
+        );
+        return sel;
+      })(),
+    ),
+    h("div", {class:"q-actions"},
+      h("button", {class:"btn wide", id:"btnEmpezar", disabled:true, onclick: startFlow}, e.botonEmpezar),
+      h("p", {class:"hint", style:"text-align:center"}, "Toma menos de 3 minutos · 100% desde el celular"),
+    ),
+  );
+  VIEW.append(hero);
+  updateEntryBtn();
+
+  function setAsoc(v){ state.asociado = v; renderEntry(); }
+  function updateEntryBtn(){
+    const btn = VIEW.querySelector("#btnEmpezar");
+    if (!btn) return;
+    btn.disabled = !(state.asociado !== null && state.seccion);
+  }
+}
+
+// --------- Preguntas ---------
+function startFlow(){ state.currentIdx = 0; renderQuestion(); }
+
+function renderQuestion(sabias){
+  clearView();
+  const flowList = flow();
+  const total = Math.max(flowList.length, 1);
+  const q = flowList[state.currentIdx];
+
+  if (!q){ return renderResult(); }
+
+  const nShown = state.currentIdx + 1;
+
+  // Header de progreso
+  const prog = h("div", {class:"prog"},
+    h("div", {class:"prog-row"},
+      state.currentIdx > 0
+        ? h("button", {class:"backBtn", onclick:goBack}, "← ", CFG.ui.volver)
+        : h("span", {}, " "),
+      h("span", {}, templ(CFG.ui.progresoFmt, {n:nShown, total:total})),
+    ),
+    h("div", {class:"prog-bar"},
+      h("div", {class:"prog-fill", style:`width:${(nShown/total)*100}%`}),
+    ),
+  );
+
+  // Opciones
+  const current = state.answers[q.id];
+  const sel = current instanceof Set ? current : (current ? new Set([current]) : new Set());
+  const optsEl = h("div", {class:"opts", role:q.type==="single"?"radiogroup":"group"});
+  for (const opt of q.options){
+    const isOn = sel.has(opt.id);
+    const btn = h("button", {
+      type:"button",
+      class: `opt${q.type==="multi"?" multi":""}${isOn?" selected":""}`,
+      role: q.type==="single"?"radio":"checkbox",
+      "aria-checked": isOn,
+      onclick: () => pick(q, opt)
+    }, h("span", {class:"mark"}), h("span", {}, opt.texto));
+    optsEl.append(btn);
+  }
+
+  const screen = h("section", {class:"screen"},
+    h("h1", {class:"q-title"}, q.texto),
+    q.type==="multi" ? h("p", {class:"q-sub"}, "Selecciona todas las que apliquen.") : null,
+    optsEl,
+  );
+
+  // Tarjeta "Sabías que" después de responder
+  if (sabias && sabias.length){
+    const card = h("div", {class:"sabias", role:"status"},
+      h("div", {class:"ic"}, CFG.ui.sabiasQue),
+      ...sabias.map(txt => h("p", {}, txt)),
+    );
+    screen.append(card);
+  }
+
+  const canNext = sel.size >= (q.min || 1);
+  const actions = h("div", {class:"q-actions"},
+    h("button", {class:"btn wide", disabled: !canNext, onclick: next}, CFG.ui.siguiente, " →"),
+  );
+  screen.append(actions);
+
+  VIEW.append(prog, screen);
+  // Scroll top al cambiar de pregunta
+  window.scrollTo({top:0, behavior:"instant"});
+
+  function pick(q, opt){
+    const cur = state.answers[q.id];
+    if (q.type === "single"){
+      state.answers[q.id] = new Set([opt.id]);
+      // Autoavanzar pequeño feedback — mostrar sabías
+      const frases = buildSabias(q, state.answers[q.id]);
+      renderQuestion(frases);
+    } else {
+      const set = cur instanceof Set ? new Set(cur) : new Set();
+      if (opt.exclusive){
+        // Toggle exclusivo: desmarca al resto
+        if (set.has(opt.id)) set.delete(opt.id);
+        else { set.clear(); set.add(opt.id); }
+      } else {
+        if (set.has(opt.id)) set.delete(opt.id);
+        else {
+          // Si había exclusivo seleccionado, quítalo
+          for (const o of q.options) if (o.exclusive) set.delete(o.id);
+          set.add(opt.id);
+        }
+      }
+      state.answers[q.id] = set;
+      const frases = buildSabias(q, set);
+      renderQuestion(frases);
+    }
+  }
+  function next(){
+    state.currentIdx++;
+    renderQuestion();
+  }
+  function goBack(){
+    state.currentIdx = Math.max(0, state.currentIdx - 1);
+    renderQuestion();
+  }
+}
+
+function buildSabias(q, selectedIds){
+  // Si la pregunta tiene frase general, úsala; si no, agrupa frases por opción (máximo 3).
+  if (q.frase){
+    return [q.frase];
+  }
+  const out = [];
+  for (const opt of q.options){
+    if (selectedIds.has(opt.id) && opt.frase){
+      out.push(opt.frase);
+      if (out.length >= 3) break;
+    }
+  }
+  return out;
+}
+
+// --------- Scoring ---------
+function computeScores(){
+  const scores = {};        // beneficioId → puntos totales
+  const reasons = {};       // beneficioId → { max: puntos, razon: string }
+  const CAP_MULTI = 3;
+
+  for (const q of flow()){
+    const ans = state.answers[q.id];
+    if (!ans) continue;
+    const sel = ans instanceof Set ? ans : new Set([ans]);
+
+    // En multi: tope de 3 por beneficio POR PREGUNTA
+    const perQ = {};
+
+    for (const opt of q.options){
+      if (!sel.has(opt.id)) continue;
+      const sc = opt.scores || {};
+      for (const b in sc){
+        let add = sc[b];
+        if (q.type === "multi"){
+          const used = perQ[b] || 0;
+          const avail = Math.max(0, CAP_MULTI - used);
+          add = Math.min(add, avail);
+          perQ[b] = used + add;
+        }
+        if (add <= 0) continue;
+        scores[b] = (scores[b] || 0) + add;
+        // Guardar la razón de la opción que más puntos aportó a este beneficio
+        if (!reasons[b] || add > reasons[b].max){
+          reasons[b] = { max: add, razon: opt.razon };
+        }
+      }
+    }
+  }
+  return { scores, reasons };
+}
+
+// --------- Perfil ---------
+function buildProfile(){
+  const ramos = state.answers.p2 instanceof Set ? Array.from(state.answers.p2) : [];
+  const nombreRamo = { vida:"Vida", gmm:"GMM", autos:"Autos", danos:"Daños", fianzas:"Fianzas" };
+  const nombres = ramos.map(r => nombreRamo[r]).filter(Boolean);
+
+  let tituloRamos;
+  if (nombres.length === 1) tituloRamos = templ(CFG.perfil.especialistaEn, {ramo:nombres[0]});
+  else if (nombres.length === 2) tituloRamos = templ(CFG.perfil.deYDe, {a:nombres[0], b:nombres[1]});
+  else if (nombres.length >= 3) tituloRamos = CFG.perfil.multirramo;
+  else tituloRamos = "Agente"; // sin ramos marcados (no debería pasar)
+
+  // Etapa por P6
+  let etapa = "";
+  const p6 = state.answers.p6;
+  if (p6){
+    const id = p6 instanceof Set ? [...p6][0] : p6;
+    const opt = CFG.preguntas.find(x=>x.id==="p6").options.find(o=>o.id===id);
+    if (opt && opt.etapa) etapa = opt.etapa;
+  }
+  return etapa ? `${tituloRamos} ${etapa}` : tituloRamos;
+}
+
+// --------- Resultado ---------
+function renderResult(){
+  clearView();
+  const { scores, reasons } = computeScores();
+
+  // Separar: top (≥3 puntos, 3–7), también tienes (resto con score > 0), siempre contigo (fijos)
+  const allIds = Object.keys(CFG.catalogo);
+  const rank = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+
+  let top = rank.filter(([,p]) => p >= 3).map(([id]) => id);
+  if (top.length < 3){
+    for (const [id] of rank){
+      if (top.includes(id)) continue;
+      top.push(id);
+      if (top.length >= 3) break;
+    }
+  }
+  top = top.slice(0, 7);
+
+  const tambien = rank
+    .map(([id]) => id)
+    .filter(id => !top.includes(id) && (scores[id] || 0) > 0);
+
+  const perfil = buildProfile();
+  const n = top.length;
+
+  // Header
+  const sedeTxt = state.seccion ? ` · ${state.seccion}` : "";
+  const head = h("div", {class:"result-head"},
+    h("small", {}, CFG.ui.resultadoTitulo.toUpperCase() + sedeTxt),
+    h("h1", {}, perfil),
+    h("p", {class:"count"}, templ(CFG.ui.resultadoSub, {n:n})),
+  );
+
+  const body = h("div", {class:"result-body"});
+
+  // Hechos para ti
+  body.append(h("h2", {class:"section-title"}, CFG.ui.hechosParaTi));
+  const topGrid = h("div", {class:"cards", style:"display:flex;flex-direction:column;gap:12px"});
+  for (const id of top){ topGrid.append(renderBenefitCard(id, reasons[id], true)); }
+  body.append(topGrid);
+
+  // También tienes
+  if (tambien.length){
+    const tambienGroup = h("details", {class:"collapse"},
+      h("summary", {}, CFG.ui.tambienTienes + ` (${tambien.length})`),
+      h("div", {class:"inner"}, ...tambien.map(id => renderBenefitCard(id, reasons[id], false))),
+    );
+    body.append(tambienGroup);
+  }
+
+  // Siempre contigo
+  const siempreGroup = h("details", {class:"collapse"},
+    h("summary", {}, CFG.ui.siempreContigo + ` (${CFG.siempreContigo.length})`),
+    h("div", {class:"inner"}, ...CFG.siempreContigo.map(it => renderStaticCard(it))),
+  );
+  body.append(siempreGroup);
+
+  // Únete banner solo para no asociados
+  if (state.asociado === false){
+    const u = CFG.meta;
+    const banner = h("div", {class:"unete-banner"},
+      h("b", {}, CFG.ui.uneteTitulo),
+      h("div", {class:"lines", html: templ(CFG.ui.uneteSub, {correo:`<a href="mailto:${u.uneteCorreo}">${u.uneteCorreo}</a>`, tel:u.uneteTel})}),
+      h("a", {class:"btn gold", href:`mailto:${u.uneteCorreo}?subject=${encodeURIComponent("Diagnóstico AMASFAC – Quiero ser asociado")}`}, "Quiero ser asociado"),
+    );
+    body.append(banner);
+  }
+
+  // Calificación
+  const califTitle = state.asociado ? CFG.ui.calificacionAsociado : CFG.ui.calificacionNoAsociado;
+  const califWrap = h("div", {},
+    h("h2", {class:"section-title", style:"text-align:center"}, califTitle),
+    (() => {
+      const row = h("div", {class:"rate", role:"radiogroup", "aria-label":califTitle});
+      for (let i=1;i<=5;i++){
+        const b = h("button", {class:"star", type:"button", role:"radio", "aria-checked":false, "aria-label":`${i} de 5`, onclick:(ev)=>setRating(i, row)}, "★");
+        row.append(b);
+      }
+      return row;
+    })(),
+    h("p", {class:"rate-msg", id:"rateMsg"}, " "),
+  );
+  body.append(califWrap);
+
+  // Contacto
+  const u = CFG.meta;
+  const privacyText = u.privacidadUrl
+    ? `Acepto el <a href="${u.privacidadUrl}" target="_blank" rel="noopener">aviso de privacidad</a> de AMASFAC.`
+    : `Acepto el aviso de privacidad de AMASFAC. <span style="color:#a06000">(liga por confirmar)</span>`;
+  const contactoWrap = h("div", {},
+    h("h2", {class:"section-title", style:"text-align:center"}, CFG.ui.contactoTitulo),
+    h("form", {class:"form-grid", id:"contactoForm", onsubmit:(ev)=>{ev.preventDefault(); sendContact();}},
+      h("input", {type:"text", name:"nombre", placeholder:CFG.ui.contactoNombre, autocomplete:"name"}),
+      h("input", {type:"email", name:"correo", placeholder:CFG.ui.contactoCorreo, autocomplete:"email"}),
+      h("input", {type:"tel", name:"celular", placeholder:CFG.ui.contactoCelular, autocomplete:"tel"}),
+      h("label", {class:"chk"},
+        h("input", {type:"checkbox", name:"acepta", id:"aceptaChk"}),
+        h("span", {html: privacyText}),
+      ),
+      h("button", {class:"btn orange wide", type:"submit", id:"contactoBtn"}, CFG.ui.contactoBoton),
+    ),
+  );
+  body.append(contactoWrap);
+
+  // Compartir
+  const shareLink = location.origin + location.pathname;
+  const shareText = templ(CFG.ui.comparteTexto, { link: shareLink });
+  const whatsHref = "https://wa.me/?text=" + encodeURIComponent(shareText);
+  body.append(h("div", {style:"text-align:center;margin-top:4px"},
+    h("h2", {class:"section-title"}, CFG.ui.comparteTitulo),
+    h("a", {class:"btn secondary wide", href:whatsHref, target:"_blank", rel:"noopener"}, "💬 ", CFG.ui.comparteBoton),
+  ));
+
+  // Cierre
+  const cierre = h("div", {class:"cierre-nav"},
+    h("button", {class:"btn ghost wide", onclick:restart}, "↻ ", CFG.ui.reiniciar),
+    fromPresentation
+      ? h("button", {class:"btn ghost wide", onclick:closeDiag}, "← ", CFG.ui.volverPresentacion)
+      : null,
+  );
+  body.append(cierre);
+
+  VIEW.append(h("section", {class:"screen result", style:"padding:0"}, head, body));
+  window.scrollTo({top:0, behavior:"instant"});
+
+  function setRating(v, row){
+    state.rating = v;
+    [...row.children].forEach((el, i) => { el.classList.toggle("on", i < v); el.setAttribute("aria-checked", i+1 === v ? "true" : "false"); });
+    const msg = document.getElementById("rateMsg");
+    msg.textContent = v >= 4 ? "¡Gracias por tu voto!" : "Gracias por tu honestidad — lo tomamos en cuenta.";
+    saveResponse(payloadSnapshot());
+  }
+  function sendContact(){
+    const f = document.getElementById("contactoForm");
+    const data = new FormData(f);
+    state.contacto = {
+      nombre: data.get("nombre")||"",
+      correo: data.get("correo")||"",
+      celular: data.get("celular")||"",
+      acepta: !!document.getElementById("aceptaChk").checked,
+    };
+    const btn = document.getElementById("contactoBtn");
+    if (!state.contacto.acepta){
+      alert("Por favor acepta el aviso de privacidad para continuar.");
+      return;
+    }
+    saveResponse(payloadSnapshot());
+    btn.textContent = "¡Enviado! Te contactaremos pronto.";
+    btn.disabled = true;
+    btn.style.background = "var(--g-green)";
+  }
+}
+
+function renderBenefitCard(id, reason, isTop){
+  const b = CFG.catalogo[id];
+  if (!b) return null;
+  const esAsociado = state.asociado === true;
+  const tag = esAsociado
+    ? h("span", {class:"tag tuyo"}, CFG.ui.etiquetaAsociado)
+    : h("span", {class:"tag exclusivo"}, CFG.ui.etiquetaNoAsociado);
+
+  // Email destino (comités puede variar por ramo)
+  let destEmail = b.email;
+  if (id === "comites" && b.emailsPorRamo){
+    const ramos = state.answers.p2 instanceof Set ? Array.from(state.answers.p2) : [];
+    for (const r of ramos){
+      if (b.emailsPorRamo[r]){ destEmail = b.emailsPorRamo[r]; break; }
+    }
+  }
+
+  const subject = esAsociado
+    ? `Diagnóstico AMASFAC – Quiero activar: ${b.nombre}`
+    : `Diagnóstico AMASFAC – Quiero ser asociado (me interesa: ${b.nombre})`;
+  const bodyText = `Nombre: \nSección: ${state.seccion || ""}\n\n`;
+
+  let btnEl = null;
+  if (!b.noButton){
+    const href = esAsociado
+      ? `mailto:${destEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`
+      : `mailto:${CFG.meta.uneteCorreo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyText)}`;
+    btnEl = h("a", {class:"btn", href:href}, esAsociado ? CFG.ui.activar : CFG.ui.loQuiero);
+  }
+
+  const detail = h("div", {class:"detail"},
+    h("p", {}, b.detalle),
+    b.extra ? h("p", {class:"extra"}, b.extra) : null,
+    destEmail ? h("p", {class:"extra"}, "Contacto: ", h("a", {href:`mailto:${destEmail}`}, destEmail)) : null,
+  );
+  const toggle = h("button", {class:"toggleDetail", onclick:(ev)=>{
+    const card = ev.target.closest(".b-card");
+    const open = card.classList.toggle("open");
+    ev.target.textContent = open ? CFG.ui.ocultarDetalle : CFG.ui.verDetalle;
+  }}, CFG.ui.verDetalle);
+
+  const card = h("div", {class:"b-card" + (isTop ? " top" : "")},
+    h("div", {class:"b-head"}, h("h3", {}, b.nombre), tag),
+    h("p", {class:"desc"}, b.descCorta),
+    reason ? h("div", {class:"why"}, h("b", {}, CFG.ui.porQue + " "), reason.razon) : null,
+    detail,
+    h("div", {class:"b-foot"}, toggle, btnEl),
+  );
+  return card;
+}
+
+function renderStaticCard(it){
+  const detail = h("div", {class:"detail"},
+    h("p", {}, it.detalle),
+    it.pendiente ? h("p", {class:"extra"}, "⚠ ", it.pendiente) : null,
+  );
+  const toggle = h("button", {class:"toggleDetail", onclick:(ev)=>{
+    const card = ev.target.closest(".b-card");
+    const open = card.classList.toggle("open");
+    ev.target.textContent = open ? CFG.ui.ocultarDetalle : CFG.ui.verDetalle;
+  }}, CFG.ui.verDetalle);
+  return h("div", {class:"b-card"},
+    h("div", {class:"b-head"}, h("h3", {}, it.nombre)),
+    h("p", {class:"desc"}, it.descCorta),
+    detail,
+    h("div", {class:"b-foot"}, toggle),
+  );
+}
+
+// --------- Reiniciar ---------
+function restart(){
+  state.asociado = null;
+  state.seccion = null;
+  state.answers = {};
+  state.currentIdx = 0;
+  state.rating = 0;
+  state.contacto = { nombre:"", correo:"", celular:"", acepta:false };
+  renderEntry();
+}
+
+// --------- Payload demo (console.log) ---------
+function payloadSnapshot(){
+  const answers = {};
+  for (const k in state.answers){
+    const v = state.answers[k];
+    answers[k] = v instanceof Set ? Array.from(v) : v;
+  }
+  const { scores } = computeScores();
+  const top = Object.entries(scores).sort((a,b)=>b[1]-a[1]).slice(0,7).map(([id,p])=>({id,p}));
+  return {
+    fecha: new Date().toISOString(),
+    asociado: state.asociado,
+    seccion: state.seccion,
+    answers,
+    scores,
+    top,
+    rating: state.rating,
+    contacto: state.contacto.acepta ? { ...state.contacto } : null,
+  };
+}
+
+// Demo: no envía nada. Única función para conectar a Google Sheets.
+function saveResponse(payload){
+  // TODO(2027): enviar a Google Sheets o endpoint propio
+  // Ej.: fetch("https://...google-apps-script...", {method:"POST", body:JSON.stringify(payload)})
+  console.log("[AMASFAC diagnostico] saveResponse", payload);
+}
+
+// --------- Arranque ---------
+renderEntry();
+
+})();
+</script>
+</body>
+</html>
